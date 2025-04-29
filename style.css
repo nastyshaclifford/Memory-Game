@@ -1,0 +1,149 @@
+body {
+    background-color: var(--soft-pink);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --border-radius-value: 10px;
+    --box-shadow-value: 0 5px 15px rgba(0, 0, 0, 0.3);
+    --pink: #ff69b4;
+    --soft-pink: #fff0f5;
+}
+
+h1 {
+    font-size: 48px;
+    color: var(--pink);
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    text-align: center;
+}
+
+.card {
+    background-color: var(--pink);
+    width: 100px;
+    height: 100px;
+    border-radius: var(--border-radius-value);
+    cursor: pointer;
+    box-shadow: var(--box-shadow-value);
+    transition: all 500ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+}
+
+.card.flipped {
+    background-color: white;
+    transform: rotateY(180deg); 
+}
+
+.card.matched {
+    background-color: pink;
+    cursor: default;
+}
+
+span {
+    transform: rotateY(180deg);
+}
+.controls {
+    border-radius: var(--border-radius-value);
+    box-shadow: var(--box-shadow-value);
+    width: 80dvw;
+    padding: 20px;
+    border: 2px solid var(--pink);
+    display: flex;
+    align-items: center;
+    color: var(--pink);
+    margin-bottom: 40px;
+}
+
+.controls .button-success {
+        margin-left: auto;
+    }
+
+
+label {
+    font-size: 20px;
+    margin-right: 7px;
+}
+
+input {
+    width: 100px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 2px solid var(--pink);
+    margin-right: 40px;
+}
+
+.button-success {
+    background-color: var(--soft-pink);
+    color: var(--pink);
+    border: 2px solid var(--pink);
+    cursor: pointer;
+    width: 150px;
+    height: 40px;
+    font-size: 15px;
+    transition: all 0.3s;
+    border-radius: var(--border-radius-value);
+    box-shadow: var(--box-shadow-value);
+}
+
+.button-success:hover {
+    background-color: #f8d8e0;
+}
+
+.board {
+    display: grid;
+    gap: 10px;
+}
+
+.status-info {
+    display: flex;
+    gap: 20px;
+    margin-left: 40px;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+#moves, #timer {
+    padding: 8px 12px;
+    background-color: #ffe4ed;
+    border: 2px solid var(--pink);
+    border-radius: var(--border-radius-value);
+    box-shadow: var(--box-shadow-value);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .status-info {
+        justify-content: space-between;
+        margin-left: 0;
+    }
+
+    .button-success {
+        width: 100%;
+    }
+
+    input {
+        width: 100%;
+    }
+}

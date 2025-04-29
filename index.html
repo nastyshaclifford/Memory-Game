@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" type="image/png" href="./assets/image/icon-flower.png" />
+</head>
+<body>
+    <h1>Игра Memory!</h1>
+    <div class="controls">
+    <label for="width">Ширина: </label>
+    <input type="number" id="width" min="4" max="11" value="4">
+
+    <label for="height">Высота: </label>
+    <input type="number" id="height" min="3" max="6" value="3">
+
+    <button id="start-button" class="button-success">Старт</button>
+    <div class="status-info">
+    <p id="moves">Ходов: 0</p>
+    <p id="timer">Время: 0 сек</p>
+    </div>
+    </div>
+    <div class="board" id="board"></div>
+    <script src="./index.js"></script>
+</body>
+</html>
