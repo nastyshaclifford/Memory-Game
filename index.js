@@ -14,37 +14,81 @@ function startGame() {
     moves = 0;
     document.getElementById('moves').textContent = 'Ходов: 0';
 
-if (isOutOfRange(width, 4, 11)) {
-    alert('Ширина должна быть от 4 до 11');
-    return;
-}
+    // Проверка стандартных ограничений
+    if (isOutOfRange(width, 4, 11)) {
+        alert('Ширина должна быть от 4 до 11');
+        return;
+    }
 
-if (isOutOfRange(height, 3, 6 )) {
-    alert('Высота должна быть от 3 до 6');
-    return;
-}
-reset();
-setupBoard(width, height);
+    if (isOutOfRange(height, 3, 6)) {
+        alert('Высота должна быть от 3 до 6');
+        return;
+    }
 
-clearInterval(timer); 
-seconds = 0;
-document.getElementById('timer').textContent = 'Время: 0 сек';
-timer = setInterval(() => {
-    seconds++;
-    document.getElementById('timer').textContent = `Время: ${seconds} сек`;
-}, 1000);
+    // Адаптация для мобильных устройств
+    if (window.innerWidth <= 768) {
+        let cardSize;
+        if (window.innerWidth <= 480) {
+            cardSize = 50;
+        } else {
+            cardSize = 60;
+        }
+        
+        // Рассчитываем доступное пространство
+        const headerHeight = 120;
+        const controlsHeight = 180;
+        const padding = 40;
+        const availableHeight = window.innerHeight - headerHeight - controlsHeight - padding;
+        
+        const maxWidth = Math.min(11, Math.floor((window.innerWidth - padding) / cardSize));
+        const maxHeight = Math.min(6, Math.floor(availableHeight / cardSize));
+        
+        if (width > maxWidth || height > maxHeight) {
+            alert(`Для вашего устройства рекомендуемый размер: ${maxWidth}x${maxHeight}`);
+            return;
+        }
+    }
 
+    reset();
+    setupBoard(width, height);
+
+    clearInterval(timer); 
+    seconds = 0;
+    document.getElementById('timer').textContent = 'Время: 0 сек';
+    timer = setInterval(() => {
+        seconds++;
+        document.getElementById('timer').textContent = `Время: ${seconds} сек`;
+    }, 1000);
 }
 
 function setupBoard(width, height) {
-    const board =  document.getElementById('board');
+    const board = document.getElementById('board');
     board.innerHTML = '';
-    board.style.gridTemplateColumns = `repeat(${width}, 100px)`;
-    board.style.gridTemplateRows = `repeat(${height}, 100px}`;
+    
+    // Размер карточки с учетом устройства
+    let cardSize;
+    if (window.innerWidth <= 480) {
+        cardSize = 50;
+    } else if (window.innerWidth <= 768) {
+        cardSize = 60;
+    } else {
+        cardSize = 100;
+    }
+    
+    // Дополнительная проверка для вертикальных экранов
+    if (window.innerHeight < 600) {
+        cardSize = Math.min(cardSize, Math.floor((window.innerHeight - 300) / height));
+    }
+    
+    // Минимальный размер карточки
+    cardSize = Math.max(40, cardSize);
+    
+    board.style.gridTemplateColumns = `repeat(${width}, ${cardSize}px)`;
+    board.style.gridTemplateRows = `repeat(${height}, ${cardSize}px)`;
 
     numberOfCards = width * height;
 
-    const selectedEmojis = shuffleArray(emogis).slice(0, numberOfCards / 2);
+    const selectedEmojis = shuffleArray(emogis).slice(0, Math.floor(numberOfCards / 2));
     const doubleEmojis = [...selectedEmojis, ...selectedEmojis]; 
 
     if (numberOfCards % 2 === 1) {
@@ -57,6 +101,8 @@ function setupBoard(width, height) {
         const card = document.createElement('div');
         card.classList.add('card');
         card.dataset.emoji = emoji;
+        card.style.width = `${cardSize}px`;
+        card.style.height = `${cardSize}px`;
 
         const emojiElement = document.createElement('span');
         emojiElement.textContent = emoji;
@@ -66,7 +112,7 @@ function setupBoard(width, height) {
         card.addEventListener('click', () => flipCard(card, emojiElement));
 
         board.appendChild(card);
-    })
+    });
 }
 
 function flipCard(card, emojiElement) {
@@ -84,6 +130,7 @@ function flipCard(card, emojiElement) {
         checkForMatch();
     }
 }
+
 function checkForMatch() {
     moves++;
     document.getElementById('moves').textContent = `Ходов: ${moves}`;
@@ -107,9 +154,9 @@ function disableCards() {
     const totalPlayable = document.querySelectorAll('.card:not([data-emoji=""])').length;
     if (totalMatched === totalPlayable) {
         clearInterval(timer);
-    setTimeout(() => {
-        alert('Ура! Игра успешно завершена! Ты молодец!');
-    }, 500);
+        setTimeout(() => {
+            alert('Ура! Игра успешно завершена! Ты молодец!');
+        }, 500);
     }
     reset();
 }
@@ -123,9 +170,7 @@ function unflipCards() {
         firstCard.querySelector('span').classList.add('hidden');
         secondCard.querySelector('span').classList.add('hidden');
 
-
         reset();
-
     }, 1000);
 }
 
@@ -138,8 +183,6 @@ function isOutOfRange(val, minVal, maxVal) {
     return val < minVal || val > maxVal;
 }
 
-document.getElementById('start-button').addEventListener('click', startGame);
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -147,3 +190,14 @@ function shuffleArray(array) {
     }
     return array;
 }
+
+// Обработчик изменения размера окна
+window.addEventListener('resize', function() {
+    if (document.querySelectorAll('.card').length > 0) {
+        const width = parseInt(document.getElementById('width').value);
+        const height = parseInt(document.getElementById('height').value);
+        setupBoard(width, height);
+    }
+});
+
+document.getElementById('start-button').addEventListener('click', startGame);
