@@ -27,3 +27,4 @@ Memory Game (Игра "Запоминалка")
 2. Открой `index.html` в браузере
 
 ## 🔗 Ссылка на GitHub Pages
+https://nastyshaclifford.github.io/Memory-Game/
